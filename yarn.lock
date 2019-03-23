@@ -7659,6 +7659,11 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-cli-plugin-now@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-now/-/vue-cli-plugin-now-1.1.0.tgz#18a73349ef4a7fbf76710ca8d3a15e1ebc7ea19b"
+  integrity sha512-mE9cRxKxWVpzrjG5VHVjkSIkGVU3DdvKaqJjgye3a+gdDnj5X6SZbGfw6sYoOUae/t54B1AIKLRANr7crO3TfA==
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
