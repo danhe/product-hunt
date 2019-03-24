@@ -8,6 +8,7 @@
       v-for="(option, index) in options"
       :key="index"
       :value="_get(option, 'value')"
+      :selected="index == value"
       class="base-single-select__option"
     >
       {{ _get(option, 'display') }}
@@ -39,10 +40,19 @@
       _get,
       /**
        * Emit the change event to parent
+       * Push the params to current route
        * @param {Object} Object of change event
        */
       onChange(event){
-        this.$emit('change', Number(event.target.value))
+        const value = Number(event.target.value)
+
+        this.$router.push({
+          name: 'product-hunt', 
+          query: { 
+            days_ago: value
+          } 
+        })
+        this.$emit('change', value)
       }
     }
   }

@@ -51,7 +51,7 @@
 
   const PRODUCT_NAME = "ProductHunt"
   const PRODUCT_DESC = "The best new products, every day"
-  const MAX_DAYS_AGO = 31
+  const MAX_DAYS_AGO = 30
 
   export default {
     name: 'ProductHunt',
@@ -64,6 +64,12 @@
     mixins: [
       ProductHuntMixin,
     ],
+    props: {
+      urlDaysAgo: {
+        type: Number,
+        default: 0
+      }
+    },
     data(){
       return {
         /**
@@ -71,13 +77,14 @@
          */
         posts: [],
         /**
-         * Select daysAgo to display the posts of that day
-         */
-        daysAgo: 0,
-        /**
          * Loading indicator
          */
         isLoading: false,
+        /**
+         * Select daysAgo to display the posts of that day
+         * If the url params is larger than MAX_DAYS_AGO, return the max days ago
+         */
+        daysAgo: (this.urlDaysAgo > MAX_DAYS_AGO ? MAX_DAYS_AGO : this.urlDaysAgo),
         /**
          * Constants: 
          */
@@ -91,7 +98,7 @@
        * @return {Array} of options
        */
       dateOptions(){
-        return _range(MAX_DAYS_AGO).map(value => ({ 
+        return _range(MAX_DAYS_AGO + 1).map(value => ({ 
           value, 
           display: formatDaysAgo(value) 
         }))
@@ -114,7 +121,17 @@
       }
     },
     async created(){
-      const { getPosts, daysAgo } = this
+      const { getPosts, daysAgo, urlDaysAgo } = this
+
+      // When the url daysAgo is larger than max value, re-push the url params with correted one
+      if(urlDaysAgo > daysAgo ) {
+        this.$router.push({
+          name: 'product-hunt', 
+          query: { 
+            days_ago: daysAgo
+          } 
+        })
+      }
 
       this.posts = await getPosts(daysAgo)
     },

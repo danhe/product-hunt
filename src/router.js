@@ -10,7 +10,8 @@ export default new Router({
     {
       path: '/',
       name: 'product-hunt',
-      component: ProductHunt
+      component: ProductHunt,
+      props: (route) => ({ urlDaysAgo: Number(route.query.days_ago) })
     },
     {
       path: '/about',
