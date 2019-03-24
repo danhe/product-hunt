@@ -10,17 +10,19 @@
         :src="_get(post, 'screenshot_url.300px')"
       />
     </div>
-    
-    <div class="post-card__title" >
-      {{ _get(post, 'name') }}
-    </div>
 
-    <div class="post-card__votes">
-      {{ _get(post, 'votes_count') }} upvotes
-    </div>
+    <div class="post-card__text" >
+      <div class="post-card__text__title" >
+        {{ _get(post, 'name') }}
+      </div>
 
-    <div class="post-card__tagline">
-      {{ _get(post, 'tagline') }}
+      <div class="post-card__text__votes">
+        {{ _get(post, 'votes_count') }} upvotes
+      </div>
+
+      <div class="post-card__text__tagline">
+        {{ _get(post, 'tagline') }}
+      </div>
     </div>
   </a>
 </template>
@@ -43,12 +45,23 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  ellipsisTextLines(maxLine, lineHeight)
+    overflow: hidden
+    text-overflow: ellipsis
+    display: -webkit-box
+    line-height: lineHeight
+    max-height: lineHeight * maxLine
+    -webkit-line-clamp: maxLine
+    -webkit-box-orient: vertical
+
   .post-card {
     background: white
     height: 230px
     text-decoration: none 
     display: block
-    color: gray
+    color: #6d6d6d
+    font-weight: 500
+    
 
     &__image  {
       height: 45%
@@ -59,29 +72,28 @@ export default {
       }
     }
 
-    &__title {
-      padding-top: 12px
-      color: #de5327
-      font-weight: bold
-    }
+    &__text {
+      padding: 0 15px 0 15px
 
-    &__votes {
-      font-size: 12px
-      padding-top: 4px
-    }
+      &__title {
+        padding-top: 12px
+        color: #de5327
+        font-weight: bold
+        ellipsisTextLines(1, 20px)
+      }
 
-    &__tagline {
-      color: black
-      font-weight: 500
-      margin: 15px
-      overflow: hidden
-      text-overflow: ellipsis
-      display: -webkit-box
-      font-size: 13px
-      line-height: 16px
-      max-height: 32px
-      -webkit-line-clamp: 2
-      -webkit-box-orient: vertical
+      &__votes {
+        font-size: 13px
+        padding-top: 4px
+      }
+
+      &__tagline {
+        color: black
+        font-size: 13px
+        ellipsisTextLines(2, 16px)
+        margin-top: 15px
+      }
+
     }
   }
 </style>
