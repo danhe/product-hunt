@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HomePage from './views/Home.vue'
+import ProductHunt from './views/ProductHunt.vue'
 
 Vue.use(Router)
 
@@ -9,8 +9,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomePage
+      name: 'product-hunt',
+      component: ProductHunt
     },
     {
       path: '/about',
