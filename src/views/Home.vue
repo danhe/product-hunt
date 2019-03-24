@@ -1,8 +1,8 @@
 <template>
-  <div class="home">
-    <div class="home__title">
+  <main class="home">
+    <h1 class="home__title">
       {{ productName }}
-    </div>
+    </h1>
 
     <div class="home__subtitle">
       {{ productDesc }}
@@ -11,123 +11,118 @@
     <BaseSingleSelect 
       class="home__date-filter"
       :options="dateOptions"
-      :value="dateFilter"
+      :value="daysAgo"
       @change="onDateChange"
     />
 
-    <VueSimpleSpinner v-if="isLoading"/>
+    <BaseSpinner v-if="isLoading" />
 
     <template v-else>
       <PostInfos 
         class="home__posts-infos"
-        :postInfos="postInfos"
+        v-bind="postsCountInfos"
       />
 
-      <PostCardsList
-        class="home__posts-list"
-        :posts="posts"
-      />
+      <PostCardsList :posts="posts" />
     </template>
-  </div>
+  </main>
 </template>
 
 <script>
   import _get from 'lodash/get'
   import _sumBy from 'lodash/sumBy'
   import _range from 'lodash/range'
-
   import axios from 'axios'
-  import VueSimpleSpinner from 'vue-simple-spinner'
+
+  import BaseSingleSelect from '@/components/BaseSingleSelect.vue'
+  import BaseSpinner from '@/components/BaseSpinner.vue'
   import PostCardsList from '@/components/PostCardsList.vue'
   import PostInfos from '@/components/PostInfos.vue'
-  import BaseSingleSelect from '@/components/BaseSingleSelect.vue'
 
   const PRODUCT_NAME = "ProductHunt"
   const PRODUCT_DESC = "The best new products, every day"
+  const MAX_DAYS_AGO = 31
 
   export default {
-    name: 'home',
+    name: 'Home',
+    components: {
+      BaseSingleSelect,
+      BaseSpinner,
+      PostCardsList,
+      PostInfos,
+    },
     data(){
       return {
         /**
-         * List of posts of date
+         * List of posts for the selected day
          */
         posts: [],
-        productName: PRODUCT_NAME,
-        productDesc: PRODUCT_DESC,
         /**
-         * Date filter
+         * Select daysAgo to display the posts of that day
          */
-        dateFilter: 0,
+        daysAgo: 0,
         /**
          * Loading indicator
          */
-        isLoading: true,
+        isLoading: false,
+        /**
+         * Constants: 
+         */
+        productName: PRODUCT_NAME,
+        productDesc: PRODUCT_DESC,
+      }
+    },
+    computed: {
+      /**
+       * All options to display in the select
+       * @return {Array} of options
+       */
+      dateOptions(){
+        const { displayDate } = this
+
+        return _range(MAX_DAYS_AGO).map(value => ({ 
+          value, 
+          display: displayDate(value) 
+        }))
+      },
+      /**
+       * Post informations
+       * @return {Object} of posts informations
+       */
+      postsCountInfos() {
+        const { posts } = this
+
+        return {
+          postsCount: posts.length,
+          votesCount: _sumBy(posts, 'votes_count'),
+          commentsCount: _sumBy(posts, 'comments_count'),
+          makersCount: _sumBy(posts, (object) => {
+            return _get(object, 'makers').length
+          })
+        }
       }
     },
     created(){
       this.fetchPosts()
     },
-    components: {
-      PostInfos,
-      PostCardsList,
-      BaseSingleSelect,
-      VueSimpleSpinner
-    },
-    computed: {
-      /**
-       * All options to display in the select
-       */
-      dateOptions(){
-        const { displayDate } = this
-
-        return _range(31).map((index) => {
-          return {
-            value: index,
-            display: displayDate(index)
-          }
-        })
-      },
-      /**
-       * Post informations
-       */
-      postInfos() {
-        const { posts } = this
-        return [{
-          number: posts.length,
-          title: 'posts'
-        }, {
-          number: _sumBy(posts, 'votes_count'),
-          title: 'votes'
-        }, {
-          number: _sumBy(posts, 'comments_count'),
-          title: 'comments'
-        }, {
-          number: _sumBy(posts, (object) => {
-            return _get(object, 'makers').length
-          }),
-          title: 'makes'
-        }]
-      }
-    },
     methods: {
       /**
        * When changing the date of select
-       *  update the dateFilter and get new updated posts
+       *  update the daysAgo and get new updated posts
        * @param {Number} value: Value of select
        */
       onDateChange(value) {
         const { fetchPosts } = this
 
-        this.dateFilter = value
+        this.daysAgo = value
         fetchPosts()
       },
       /**
        * Getting posts of date filter from server
        */
       fetchPosts(){
+        const { daysAgo } = this
         this.isLoading = true
-        const { dateFilter } = this
 
         const instance = axios.create({
           baseURL: 'https://api.producthunt.com',
@@ -135,37 +130,33 @@
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 9fc09fc67a01d1ab20b258db5b1751f071e1aabd1c394c54850b85da0890bda5'
+            'Authorization': `Bearer ${process.env.VUE_APP_TOKEN}`
           }
         })
 
         instance.get('/v1/posts', {
           params: {
-            days_ago: dateFilter
+            days_ago: daysAgo
           }
         }).then(response => {
             this.posts = _get(response, 'data.posts')
             this.isLoading = false
-        }).catch(error => {
+        }).catch(() => {
           this.isLoading = false
-          console.log(error)
         })
       },
       /**
-       * @param {Number} daysAgo: datefilter qui present how many days ago
+       * @param {Number} daysAgo: daysAgo qui present how many days ago
        * @returns {String} Date display
        */
       displayDate(daysAgo){
         switch(daysAgo){
           case 0: 
             return 'Today'
-            break
           case 1:
             return 'Yesterday'
-            break
           default:
             return `${daysAgo} days ago`
-            break
         }
       }
     }
@@ -179,9 +170,9 @@
     padding-bottom: 60px
     
     &__title {
-      font-size: 1.6em
-      font-weight: bold
       color: $primary_color
+      font-size: 1.6em
+      margin: 0
     }
 
     &__subtitle {

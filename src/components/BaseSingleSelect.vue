@@ -1,18 +1,18 @@
 <template>
-  <select
+  <Select
     class="base-single-select"
     :value="value"
     @change="onChange"
   >
-    <option 
-      class="base-single-select__option"
+    <Option 
       v-for="(option, index) in options"
       :key="index"
       :value="_get(option, 'value')"
+      class="base-single-select__option"
     >
       {{ _get(option, 'display') }}
-    </option>
-  </select>
+    </Option>
+  </Select>
 </template>
 
 <script>

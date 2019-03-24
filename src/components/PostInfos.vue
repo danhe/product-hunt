@@ -1,23 +1,41 @@
 <template>
-  <table 
-    class="post-infos"
-    cellpadding="5"
-  >
-    <tr>
-      <td 
-        class="post-infos__td"
-        v-for="(info, index) in postInfos"
-        :key="index"
-      >
-        <div class="post-infos__td__number">
-          {{ _get(info, 'number') }}
-        </div>
-        <div class="post-infos__td__title">
-          {{ _get(info, 'title') }}
-        </div>
-      </td>
-    </tr>
-  </table>
+  <div class="post-infos">
+    <div class="post-infos-count">
+      <div class="post-infos-count__number">
+        {{ postsCount }}
+      </div>
+      <div class="post-infos-count__text">
+        Posts
+      </div>
+    </div>
+
+    <div class="post-infos-count">
+      <div class="post-infos-count__number">
+        {{ votesCount }}
+      </div>
+      <div class="post-infos-count__text">
+        Votes
+      </div>
+    </div>
+
+    <div class="post-infos-count">
+      <div class="post-infos-count__number">
+        {{ commentsCount }}
+      </div>
+      <div class="post-infos-count__text">
+        Comments
+      </div>
+    </div>
+
+    <div class="post-infos-count">
+      <div class="post-infos-count__number">
+        {{ makersCount }}
+      </div>
+      <div class="post-infos-count__text">
+        Makers
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -26,11 +44,32 @@
   export default {
     props: {
       /**
-       * All information of post
+       * Amount of post
        */
-      postInfos: {
-        type: Array,
-        default: () => []
+      postsCount: {
+        type: Number,
+        default: 0
+      },
+      /**
+       * Amount of votes
+       */
+      votesCount: {
+        type: Number,
+        default: 0
+      },
+      /**
+       * Amount of comments
+       */
+      commentsCount: {
+        type: Number,
+        default: 0
+      },
+      /**
+       * Amount of makers
+       */
+      makersCount: {
+        type: Number,
+        default: 0
       }
     },
     methods: {
@@ -43,11 +82,19 @@
   @import '~@/assets/stylus/colors.styl'
 
   .post-infos {
-    margin-left: auto
-    margin-right: auto
     font-size: 14px
+    display: flex
 
-    &__td {
+    &-count {
+      margin: 0 5px 0 5px
+
+      &:first-child {
+        margin-left: auto
+      }
+
+      &:last-child {
+        margin-right: auto
+      }
 
       &__number {
         font-size: 1.2em
@@ -55,7 +102,7 @@
         color: $primary_color
       }
 
-      &__title {
+      &__text {
         font-size: 10px
         text-transform: uppercase
       }
