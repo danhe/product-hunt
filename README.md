@@ -1,6 +1,6 @@
 # product-hunt
 
-### [Demo here](https://product-hunt.danhe.now.sh/#/)
+### [Demo here](https://product-hunt.danhe.now.sh)
 
 ## Project setup
 ```
