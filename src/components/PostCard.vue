@@ -33,6 +33,9 @@ import _get from 'lodash/get'
 export default {
   name: 'PostCard',
   props: {
+    /**
+     * Post object to display
+     */
     post: {
       type: Object,
       default: () => null
@@ -45,6 +48,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  @import '~@/assets/stylus/colors.styl'
+
   ellipsisTextLines(maxLine, lineHeight)
     overflow: hidden
     text-overflow: ellipsis
@@ -55,6 +60,7 @@ export default {
     -webkit-box-orient: vertical
 
   .post-card {
+    border: 1px solid #ece5e5
     background: white
     height: 230px
     text-decoration: none 
@@ -77,8 +83,8 @@ export default {
 
       &__title {
         padding-top: 12px
-        color: #de5327
         font-weight: bold
+        color: $primary_color
         ellipsisTextLines(1, 20px)
       }
 

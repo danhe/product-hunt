@@ -1,11 +1,10 @@
 <template>
   <div class="post-cards-list">
-    <div
+    <PostCard 
       v-for="(post, index) in posts" 
       :key="index"
-    >
-      <PostCard :post="post"/>
-    </div>
+      :post="post"
+    />
   </div>
 </template>
 
@@ -20,6 +19,9 @@ export default {
     PostCard
   },
   props: {
+    /**
+     * List of posts objects
+     */
     posts: {
       type: Array,
       default: () => []
