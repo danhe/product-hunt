@@ -34,11 +34,21 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  @import '~@/assets/stylus/layout.styl'
+
   .post-cards-list {
-    display: grid
     grid-template-columns: repeat(3, 1fr)
+    display: grid
     grid-column-gap: 24px
     grid-row-gap: 24px
     width: 100%
+
+    @media phone {
+      grid-template-columns: 1fr
+    }
+
+    @media tablet {
+      grid-template-columns: repeat(2, 1fr)
+    }
   }
 </style>
