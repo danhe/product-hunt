@@ -8,7 +8,7 @@
       v-for="(option, index) in options"
       :key="index"
       :value="_get(option, 'value')"
-      :selected="index == value"
+      :selected="index === value"
       class="base-single-select__option"
     >
       {{ _get(option, 'display') }}
@@ -52,6 +52,7 @@
             days_ago: value
           } 
         })
+        
         this.$emit('change', value)
       }
     }

@@ -36,7 +36,7 @@
         to="/product-hunt"
         tag="button"
       >
-        Show me the ProductHunt
+        Show me the Posts
       </router-link>
     </p>
   </div>
