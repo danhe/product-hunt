@@ -1,4 +1,5 @@
 <script>
+  import { mapActions } from 'vuex'
   import axios from 'axios'
   import _get from 'lodash/get'
 
@@ -34,6 +35,9 @@
       })
     },
     methods: {
+      ...mapActions([
+        'addPosts'
+      ]),
       /**
        * Sending request to server to get the post of selected day
        *  - if success, return the posts list
@@ -64,9 +68,14 @@
        * @param {Object} response of the query sent in getPosts
        */
       $_productHuntMixin_success(response) {
+        const { addPosts } = this
+
         this.isLoading = false
-        
-        return _get(response, 'data.posts')
+        const posts = _get(response, 'data.posts')
+
+        //Add posts in vuex
+        addPosts(posts)
+        return posts
       },
       /**
        * Private method

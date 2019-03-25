@@ -43,6 +43,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import _get from 'lodash/get'
   import _sumBy from 'lodash/sumBy'
   import _range from 'lodash/range'
@@ -80,10 +81,6 @@
     data(){
       return {
         /**
-         * List of posts for the selected day
-         */
-        posts: [],
-        /**
          * Select daysAgo to display the posts of that day
          * If the url params is larger than MAX_DAYS_AGO, return the max days ago
          */
@@ -104,6 +101,12 @@
       }
     },
     computed: {
+      /**
+       * List of posts for the selected day
+       */
+      ...mapGetters({
+        posts: 'selectPosts'
+      }),
       /**
        * All options to display in the select
        * @return {Array} of options
@@ -145,7 +148,7 @@
         })
       }
 
-      this.posts = await getPosts(daysAgo)
+      await getPosts(daysAgo)
     },
     methods: {
       /**
@@ -158,7 +161,7 @@
 
         this.hasDaysAgoWarning = false
         this.daysAgo = value
-        this.posts = await getPosts(this.daysAgo)
+        await getPosts(this.daysAgo)
       }
     }
   }
