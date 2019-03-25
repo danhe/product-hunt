@@ -15,6 +15,13 @@
       @change="onDateChange"
     />
 
+    <div
+      v-if="hasDaysAgoWarning"
+      class="product-hunt--warnings"
+    >
+      You can just get the products of maxime 30 days ago
+    </div>
+
     <BaseSpinner v-if="isLoading" />
 
     <div 
@@ -77,14 +84,18 @@
          */
         posts: [],
         /**
-         * Loading indicator
-         */
-        isLoading: false,
-        /**
          * Select daysAgo to display the posts of that day
          * If the url params is larger than MAX_DAYS_AGO, return the max days ago
          */
         daysAgo: (this.urlDaysAgo > MAX_DAYS_AGO ? MAX_DAYS_AGO : this.urlDaysAgo),
+        /**
+         * Loading indicator
+         */
+        isLoading: false,
+        /**
+         * Warning indicator
+         */
+        hasDaysAgoWarning: false,
         /**
          * Constants: 
          */
@@ -125,6 +136,7 @@
 
       // When the url daysAgo is larger than max value, re-push the url params with correted one
       if(urlDaysAgo > daysAgo ) {
+        this.hasDaysAgoWarning = true
         this.$router.push({
           name: 'product-hunt', 
           query: { 
@@ -144,6 +156,7 @@
       async onDateChange(value) {
         const { getPosts } = this
 
+        this.hasDaysAgoWarning = false
         this.daysAgo = value
         this.posts = await getPosts(this.daysAgo)
       }
@@ -154,16 +167,23 @@
 <style lang="stylus" scoped>
   @import '~@/assets/stylus/colors.styl'
 
+  alertStyle(color, backgroundColor)
+    color: color
+    background-color: backgroundColor
+    margin: 10px 0
+    vertical-align: middle
+    border-radius: .2em
+    padding: 10px
+
   .product-hunt {
     padding-bottom: 60px
 
     &--errors {
-      color: #d8000c
-      background-color: #ffd2d2
-      margin: 10px 22px
-      vertical-align: middle
-      border-radius: .2em
-      padding: 10px
+      alertStyle(#d8000c, #ffd2d2)
+    }
+
+    &--warnings {
+      alertStyle(#9F6000, #FEEFB3)
     }
     
     &__title {
