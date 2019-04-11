@@ -1,9 +1,9 @@
 <template>
   <div class="home">
-    <h1>Hello Livestorm</h1>
+    <h1>Hello</h1>
     <p>
       I'm Dan, here is my project on VueJS with product-hunt's API.
-      I designed the project as a large application so I could show you my technical skills.
+      I designed the project as a large application.
       Here is some things that I want to explain to you:
     </p>
     <ul>
